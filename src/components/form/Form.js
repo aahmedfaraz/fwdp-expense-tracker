@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-const Form = () => {
+const Form = ({ data, setData }) => {
 
   // State
   const [transaction, setTransaction] = useState({
@@ -12,9 +12,44 @@ const Form = () => {
   // Function
   const onChange = (e) => setTransaction({...transaction, [e.target.name]: e.target.value});
 
+  const getTotalValues = () => {
+      let totalIncome = 0;
+      let totalExpenses = 0;
+      data.forEach(transaction => {
+          if(transaction.type === "income") {
+              totalIncome += parseInt(transaction.amount);
+          } else {
+              totalExpenses += parseInt(transaction.amount);
+          }
+      });
+      return {
+          totalIncome,
+          totalExpenses,
+      }
+  }
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const { totalIncome, totalExpenses } = getTotalValues();
+    if(transaction.description === "" || transaction.amount === 0) {
+      return alert("Some credentials are missing.");
+    }
+    const currBalance = totalIncome - totalExpenses;
+    if(transaction.type === "expenses" && currBalance < transaction.amount) {
+      return alert("You don't have enough balance.");
+    }
+    setData([...data, transaction]);
+    setTransaction({
+      description: "",
+      amount: 0,
+      type: "expenses",
+    })
+  }
+
+
   // UI
   return (
-    <form>
+    <form onSubmit={onSubmit}>
         <h1>Add Transaction</h1>
         {/* Description */}
         <div className="form-control">
