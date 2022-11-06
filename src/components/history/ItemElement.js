@@ -5,6 +5,7 @@ const ItemElement = ({element: {description, amount, type}}) => {
     <li className='history-element'>
         <span>{description}</span>
         <span><small className={`${type}`}>USD</small> {formatNumber(amount)}</span>
+        <button><i class="fa-sharp fa-solid fa-xmark"></i></button>
     </li>
   )
 }
